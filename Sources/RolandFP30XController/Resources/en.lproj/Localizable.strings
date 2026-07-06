@@ -1,4 +1,6 @@
 "window_title" = "Roland FP-30X Controller";
+"prefs_language" = "Language:";
+"prefs_language_restart" = "Restart the application for the new language to take effect.";
 "group_configuration" = "Configuration";
 "group_main" = "Main";
 "label_device" = "Device:";

@@ -1,4 +1,6 @@
 "window_title" = "Controlador Roland FP-30X";
+"prefs_language" = "Idioma:";
+"prefs_language_restart" = "Reinicia la aplicación para que el nuevo idioma surta efecto.";
 "group_configuration" = "Configuración";
 "group_main" = "Principal";
 "label_device" = "Dispositivo:";

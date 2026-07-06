@@ -1,4 +1,6 @@
 "window_title" = "Roland FP-30X 控制器";
+"prefs_language" = "语言：";
+"prefs_language_restart" = "重启应用程序后新语言设置生效。";
 "group_configuration" = "配置";
 "group_main" = "主要";
 "label_device" = "设备：";

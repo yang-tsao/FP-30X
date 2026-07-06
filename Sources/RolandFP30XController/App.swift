@@ -35,5 +35,45 @@ struct RolandFP30XControllerApp: App {
                     Text(loc("pd_warning_text"))
                 }
         }
+
+        Settings {
+            LanguagePrefsView()
+        }
+    }
+}
+
+// MARK: - Language preferences
+
+private let languageOptions: [(code: String, name: String)] = [
+    ("en", "English"),
+    ("es", "Español"),
+    ("zh", "中文"),
+]
+
+private func currentLanguageCode() -> String {
+    Bundle.module.preferredLocalizations.first ?? "en"
+}
+
+private struct LanguagePrefsView: View {
+    @State private var selected: String = currentLanguageCode()
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Picker(loc("prefs_language"), selection: $selected) {
+                ForEach(languageOptions, id: \.code) { opt in
+                    Text(opt.name).tag(opt.code)
+                }
+            }
+            .pickerStyle(.radioGroup)
+            .onChange(of: selected) { code in
+                UserDefaults.standard.set([code], forKey: "AppleLanguages")
+            }
+
+            Text(loc("prefs_language_restart"))
+                .font(.caption)
+                .foregroundColor(.secondary)
+        }
+        .padding()
+        .frame(width: 240)
     }
 }
