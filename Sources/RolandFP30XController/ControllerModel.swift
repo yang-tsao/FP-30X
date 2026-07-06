@@ -204,7 +204,6 @@ final class ControllerModel: ObservableObject {
     nonisolated(unsafe) private var pianoPollTimer: Timer?
     private var masterVolDebounceWorkItem: DispatchWorkItem?
     private var tempoDebounceWorkItem: DispatchWorkItem?
-    private var invTuningDebounceWorkItem: DispatchWorkItem?
     private var toneRefreshWorkItem: DispatchWorkItem?
     private var readPianoValuesTimeout: DispatchWorkItem?
 
@@ -350,6 +349,7 @@ final class ControllerModel: ObservableObject {
             if transpose != 0 { sendTranspose(updateStatus: false) }
 
             // Port watchdog
+            portWatchdogTimer?.invalidate()
             portWatchdogTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
                 Task { @MainActor in self?.checkConnectedPorts() }
             }
@@ -361,6 +361,7 @@ final class ControllerModel: ObservableObject {
     func syncConnectionDependentControls() {}
 
     private func disconnectDevice(statusKey: String, name: String? = nil) {
+        portWatchdogTimer?.invalidate(); portWatchdogTimer = nil
         pianoPollTimer?.invalidate(); pianoPollTimer = nil
         toneRefreshWorkItem?.cancel(); toneRefreshWorkItem = nil
         readPianoValuesTimeout?.cancel(); readPianoValuesActive = false
@@ -674,7 +675,6 @@ final class ControllerModel: ObservableObject {
     private func cancelDebounceTimers() {
         masterVolDebounceWorkItem?.cancel()
         tempoDebounceWorkItem?.cancel()
-        invTuningDebounceWorkItem?.cancel()
     }
 
     // MARK: - Piano state poll

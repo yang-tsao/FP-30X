@@ -1,9 +1,10 @@
 import SwiftUI
+import RolandMIDI
 
 @main
 struct RolandFP30XControllerApp: App {
     @StateObject private var model = ControllerModel()
-    @AppStorage("connect_help_skip_startup") private var connectHelpSkipStartup = false
+    @AppStorage(kSettingConnectHelpSkipStartup) private var connectHelpSkipStartup = false
 
     var body: some Scene {
         WindowGroup {
