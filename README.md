@@ -3,7 +3,7 @@
 A native macOS controller app for the Roland FP-30X digital piano. Communicate with your piano via USB or Bluetooth MIDI to control tones, keyboard modes, metronome, transpose, master tuning, Piano Designer, and more.
 
 > **Disclaimer:** This is an **independent, open-source project**. It is **not** affiliated with, endorsed by, or sponsored by **Roland Corporation**. *Roland* and *FP-30X* are trademarks of their respective owners. If you publish this app in a store, verify naming and trademark use with qualified counsel and comply with each store’s policies.
-> 
+
 > Much of the SysEx messaging was reverse-engineered from the official Roland Piano App (v1.5.9).
 
 ## Requirements
