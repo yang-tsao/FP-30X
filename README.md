@@ -30,7 +30,7 @@ swift run RolandFP30XController
 swift run RolandFP30XController --verbose
 
 # Or open the .app bundle created by make_app.sh:
-open build/Release/RolandFP30XController.app
+open "build/FP-30X Controller.app"
 ```
 
 ### CLI Flags
@@ -45,7 +45,7 @@ open build/Release/RolandFP30XController.app
 If you downloaded the `.app` bundle from a release, macOS may block it with a quarantine warning. Clear the attribute before launching:
 
 ```bash
-xattr -c RolandFP30XController.app
+xattr -c "FP-30X Controller.app"
 ```
 
 ## Test
@@ -84,6 +84,10 @@ Tests/
 
 Two SPM products: `RolandMIDI` (library) and `RolandFP30XController` (executable).
 
+## Credits
+
+Ported from the Python project [RolandFP30xController](https://github.com/aortegaCampanillas/RolandFP30xController) by `aortegaCampanillas`.
+
 ## License
 
-Proprietary. No license granted.
+MIT License. See [LICENSE](LICENSE).

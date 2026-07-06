@@ -32,7 +32,7 @@ Tests/
 - **Tone program numbers**: `Tone.programDoc` is 1…128 (manual convention); `Tone.programMidi` is 0…127 (wire format).
 - **SysEx addresses**: 4-byte tuples `(UInt8,UInt8,UInt8,UInt8)`.
 - **No external dependencies** — pure SPM with CoreMIDI and SwiftUI from the platform SDK.
-- **Language**: `Lang` enum with `.en`/`.es`, auto-detected from `Locale` on first launch.
+- **Language**: String codes `"en"`/`"es"`/`"zh"`, auto-detected from `Locale` on first launch (stored in `UserDefaults`).
 - **Verbose mode**: pass `--verbose` flag to enable hex MIDI tracing to stderr.
 - **platforms**: macOS 13+ only. The app won't build for iOS/Linux.
 
