@@ -1,0 +1,24 @@
+{
+    "configurations": [
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:FP-30X}",
+            "name": "Debug RolandFP30XController",
+            "target": "RolandFP30XController",
+            "configuration": "debug",
+            "preLaunchTask": "swift: Build Debug RolandFP30XController"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:FP-30X}",
+            "name": "Release RolandFP30XController",
+            "target": "RolandFP30XController",
+            "configuration": "release",
+            "preLaunchTask": "swift: Build Release RolandFP30XController"
+        }
+    ]
+}
