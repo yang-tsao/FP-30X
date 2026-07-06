@@ -139,6 +139,9 @@
 "tone_cat_other" = "其他";
 "tone_cat_drums" = "鼓组";
 "tone_cat_gm2" = "GM2";
+"label_lang_en" = "English";
+"label_lang_es" = "Español";
+"label_lang_zh" = "中文";
 "pd_temp_equal" = "平均律";
 "pd_temp_just_major" = "纯律大调";
 "pd_temp_just_minor" = "纯律小调";

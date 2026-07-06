@@ -103,7 +103,7 @@ private struct ConnectionBar: View {
                     set: { model.setLanguage($0) }
                 )) {
                     ForEach(Lang.allCases, id: \.self) { l in
-                        Text(l == .en ? "English" : (l == .es ? "Español" : "中文"))
+                        Text(model.trl("label_lang_\(l.rawValue)"))
                             .tag(l)
                     }
                 }

@@ -139,6 +139,9 @@
 "tone_cat_other" = "Otros";
 "tone_cat_drums" = "Batería";
 "tone_cat_gm2" = "GM2";
+"label_lang_en" = "English";
+"label_lang_es" = "Español";
+"label_lang_zh" = "中文";
 "pd_temp_equal" = "Igual";
 "pd_temp_just_major" = "Justa mayor";
 "pd_temp_just_minor" = "Justa menor";
