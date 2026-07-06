@@ -1,10 +1,14 @@
 import Foundation
 
 public enum Lang: String, CaseIterable, Sendable {
-    case en, es
+    case en, es, zh
 
     var locale: Locale {
-        Locale(identifier: rawValue == "es" ? "es" : "en")
+        switch self {
+        case .es: return Locale(identifier: "es")
+        case .zh: return Locale(identifier: "zh_Hans")
+        default:  return Locale(identifier: "en")
+        }
     }
 
     var bundle: Bundle {

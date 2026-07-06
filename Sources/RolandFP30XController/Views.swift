@@ -103,7 +103,7 @@ private struct ConnectionBar: View {
                     set: { model.setLanguage($0) }
                 )) {
                     ForEach(Lang.allCases, id: \.self) { l in
-                        Text(l == .en ? "English" : "Español")
+                        Text(l == .en ? "English" : (l == .es ? "Español" : "中文"))
                             .tag(l)
                     }
                 }
@@ -690,7 +690,7 @@ private struct PianoDesignerView: View {
                     Spacer()
                     Picker("", selection: Binding(get: { model.pdTemperamentKey }, set: { model.pdTemperamentKey = $0; model.pdSendTemperamentKey($0) })) {
                         ForEach(0..<12, id: \.self) { i in
-                            Text(model.lang == .es ? temperamentKeysEs[i] : temperamentKeysEn[i]).tag(i)
+                            Text(model.lang == .es ? temperamentKeysEs[i] : (model.lang == .zh ? temperamentKeysZh[i] : temperamentKeysEn[i])).tag(i)
                         }
                     }
                 }
@@ -790,6 +790,7 @@ struct ConnectHelpDialog: View {
                 Picker("", selection: Binding<Lang>(get: { model.lang }, set: { model.setLanguage($0) })) {
                     Text(model.trl("help_connect_view_english")).tag(Lang.en)
                     Text(model.trl("help_connect_view_spanish")).tag(Lang.es)
+                    Text(model.trl("help_connect_view_chinese")).tag(Lang.zh)
                 }
             }
 
