@@ -59,12 +59,16 @@ private struct LanguagePrefsView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Picker(loc("prefs_language"), selection: $selected) {
-                ForEach(languageOptions, id: \.code) { opt in
-                    Text(opt.name).tag(opt.code)
+            HStack {
+                Text(loc("prefs_language"))
+                Picker("", selection: $selected) {
+                    ForEach(languageOptions, id: \.code) { opt in
+                        Text(opt.name).tag(opt.code)
+                    }
                 }
+                .labelsHidden()
+                .frame(width: 120)
             }
-            .pickerStyle(.radioGroup)
             .onChange(of: selected) { code in
                 UserDefaults.standard.set([code], forKey: "AppleLanguages")
             }
@@ -74,6 +78,6 @@ private struct LanguagePrefsView: View {
                 .foregroundColor(.secondary)
         }
         .padding()
-        .frame(width: 240)
+        .frame(width: 280)
     }
 }
