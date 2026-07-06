@@ -72,8 +72,27 @@ else
     echo "  icon: none (install librsvg to embed: brew install librsvg)"
 fi
 
+# ── DMG ────────────────────────────────────────────────────────────────────────
+DMG_NAME="FP-30XController"
+DMG_PATH="build/${DMG_NAME}.dmg"
+DMG_TMP="build/_dmg_tmp"
+
+rm -rf "$DMG_TMP" "$DMG_PATH"
+mkdir -p "$DMG_TMP"
+cp -R "$APP_DIR" "$DMG_TMP/"
+ln -s /Applications "$DMG_TMP/Applications"
+
 echo ""
-echo "=== Done: $APP_DIR ==="
+echo "=== Creating DMG ==="
+hdiutil create -volname "$APP_NAME" \
+    -srcfolder "$DMG_TMP" \
+    -ov -format UDZO \
+    "$DMG_PATH"
+
+rm -rf "$DMG_TMP"
+
+echo ""
+echo "=== Done: $APP_DIR | $DMG_PATH ==="
 echo ""
 echo "  Copy to /Applications"
 echo "  cp -R \"$APP_DIR\" /Applications/"
