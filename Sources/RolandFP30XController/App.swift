@@ -51,7 +51,9 @@ private let languageOptions: [(code: String, name: String)] = [
 ]
 
 private func currentLanguageCode() -> String {
-    Bundle.module.preferredLocalizations.first ?? "en"
+    UserDefaults.standard.string(forKey: "app_language")
+        ?? Bundle.module.preferredLocalizations.first
+        ?? "en"
 }
 
 private struct LanguagePrefsView: View {
@@ -70,7 +72,7 @@ private struct LanguagePrefsView: View {
                 .frame(width: 120)
             }
             .onChange(of: selected) { code in
-                UserDefaults.standard.set([code], forKey: "AppleLanguages")
+                setAppLanguage(code)
             }
 
             Text(loc("prefs_language_restart"))
