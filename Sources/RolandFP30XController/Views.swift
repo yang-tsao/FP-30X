@@ -95,21 +95,6 @@ private struct ConnectionBar: View {
                     .disabled(!model.isConnected || model.lastInputPort == nil)
                 }
             }
-
-            HStack(spacing: 8) {
-                Text(model.trl("label_language"))
-                Picker("", selection: Binding<Lang>(
-                    get: { model.lang },
-                    set: { model.setLanguage($0) }
-                )) {
-                    ForEach(Lang.allCases, id: \.self) { l in
-                        Text(model.trl("label_lang_\(l.rawValue)"))
-                            .tag(l)
-                    }
-                }
-                .frame(width: 120)
-                Spacer()
-            }
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 10)
@@ -474,7 +459,7 @@ private struct SplitPointRow: View {
             Button("-") { model.decSplitPoint() }
                 .buttonStyle(.bordered).controlSize(.small)
                 .frame(width: 36)
-            Text(midiNoteName(model.splitPointVal, model.lang))
+            Text(midiNoteName(model.splitPointVal))
                 .foregroundColor(accentOrange).bold()
                 .frame(minWidth: 40)
             Button("+") { model.incSplitPoint() }
@@ -690,7 +675,7 @@ private struct PianoDesignerView: View {
                     Spacer()
                     Picker("", selection: Binding(get: { model.pdTemperamentKey }, set: { model.pdTemperamentKey = $0; model.pdSendTemperamentKey($0) })) {
                         ForEach(0..<12, id: \.self) { i in
-                            Text(model.lang == .es ? temperamentKeysSolfege[i] : temperamentKeysLetter[i]).tag(i)
+                            Text(temperamentKeys[i]).tag(i)
                         }
                     }
                 }
@@ -702,7 +687,7 @@ private struct PianoDesignerView: View {
                 VStack(spacing: 8) {
                     Picker(model.trl("inv_label_note"), selection: $model.invNoteIndex) {
                         ForEach(0..<invNoteCount, id: \.self) { i in
-                            Text(midiNoteName(invNoteMidiBase + i, model.lang)).tag(i)
+                            Text(midiNoteName(invNoteMidiBase + i)).tag(i)
                         }
                     }
 
@@ -784,16 +769,6 @@ struct ConnectHelpDialog: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            HStack {
-                Text(model.trl("help_connect_language"))
-                Spacer()
-                Picker("", selection: Binding<Lang>(get: { model.lang }, set: { model.setLanguage($0) })) {
-                    Text(model.trl("help_connect_view_english")).tag(Lang.en)
-                    Text(model.trl("help_connect_view_spanish")).tag(Lang.es)
-                    Text(model.trl("help_connect_view_chinese")).tag(Lang.zh)
-                }
-            }
-
             ScrollView {
                 Text(model.trl("help_connect_body"))
                     .font(.body)
@@ -867,12 +842,12 @@ extension ControllerModel {
     var transposeSigned: String { transpose != 0 ? "\(transpose > 0 ? "+" : "")\(transpose)" : "0" }
 
     func trl(_ key: String, _ args: CVarArg...) -> String {
-        RolandFP30XController.tr(lang, key, args)
+        if args.isEmpty { return loc(key) }
+        return locf(key, args)
     }
 
     func toneCategoryLabel(_ cat: String) -> String {
-        if let k = toneCategoryI18nKeys[cat] { return trl(k) }
-        return cat
+        loc("tone_cat_" + cat.replacingOccurrences(of: ".", with: "").lowercased())
     }
 }
 

@@ -20,19 +20,19 @@ struct RolandFP30XControllerApp: App {
                     }
                     model.refreshPorts()
                 }
-                .alert(tr(model.lang, "pd_warning_title"),
+                .alert(loc("pd_warning_title"),
                        isPresented: $model.showPdWarning) {
-                    Button(tr(model.lang, "dlg_yes")) {
+                    Button(loc("dlg_yes")) {
                         if model.keyboardMode != 0 {
                             model.keyboardMode = 0
                             model.sendKeyboardMode(0)
                         }
                         model.setPdWarningShown()
                     }
-                    Button(tr(model.lang, "dlg_no"), role: .cancel) {}
-                    Button(tr(model.lang, "pd_warning_dont_show")) { model.setPdWarningShown() }
+                    Button(loc("dlg_no"), role: .cancel) {}
+                    Button(loc("pd_warning_dont_show")) { model.setPdWarningShown() }
                 } message: {
-                    Text(tr(model.lang, "pd_warning_text"))
+                    Text(loc("pd_warning_text"))
                 }
         }
     }

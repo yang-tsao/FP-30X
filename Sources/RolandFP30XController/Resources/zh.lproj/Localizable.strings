@@ -1,7 +1,6 @@
 "window_title" = "Roland FP-30X 控制器";
 "group_configuration" = "配置";
 "group_main" = "主要";
-"label_language" = "语言";
 "label_device" = "设备：";
 "label_instrument" = "乐器";
 "btn_metronome_off" = "▶ 节拍器";
@@ -17,10 +16,6 @@
 "dlg_connect_help_title" = "如何连接 FP-30X";
 "help_connect_skip_startup" = "应用程序启动时不再显示此对话框";
 "help_connect_close" = "关闭";
-"help_connect_language" = "语言";
-"help_connect_view_english" = "English";
-"help_connect_view_spanish" = "Español";
-"help_connect_view_chinese" = "中文";
 "help_connect_body" = "此应用程序通过 MIDI 控制您的电钢琴。FP-30X 必须作为一组 MIDI 端口出现在操作系统中（如果在此应用中看不到，请使用本应用中的刷新功能）。\n\nUSB 线缆（有线连接）\n• 打开 FP-30X。\n• 使用随附的 USB 线缆，将钢琴的 USB 端口（通常标有 Computer 或 USB）连接到您的 Mac 或 PC。\n• 等待几秒钟，让系统识别设备。在多数 Mac 上不需要额外驱动程序；在 Windows 上，如果钢琴未显示为 MIDI 设备，请安装 Roland 的 USB 驱动程序（请访问 Roland 支持页面了解您的型号和操作系统）。\n• 在本应用中：刷新，选择匹配您 FP-30X 的 MIDI 输出设备（名称可能不同，例如 FP-30X 或 Roland Digital Piano），然后连接。\n\n蓝牙（无线连接）— 重要提示\n音频蓝牙和 MIDI 蓝牙不是同一回事。此应用程序需要 MIDI。在 macOS 上，通常需要先在系统蓝牙中配对，然后在音频 MIDI 设置中启用 MIDI 设备。\n\n1) 将钢琴置入配对模式\n• 在 FP-30X 上，按住功能按钮约 5 秒钟，直到蓝牙指示灯闪烁（请查看用户手册了解确切的 LED 模式）。\n\n2) 在系统蓝牙中配对 \"FP-30X Audio\"\n• 打开系统设置 → 蓝牙（或在旧版 macOS 上进入系统偏好设置 → 蓝牙）。\n• 选择 FP-30X Audio（措辞可能略有不同）并完成配对。\n• 此步骤通常启用音频配置文件；MIDI 可能还需要第 3 步。\n\n3) 在音频 MIDI 设置中连接 \"FP-30X MIDI\"（macOS）\n• 打开音频 MIDI 设置（Spotlight 或应用程序 → 实用工具）。\n• 菜单 窗口 → 显示 MIDI 工作室。\n• 点击 MIDI 工作室工具栏中的蓝牙控制按钮。\n• 短暂扫描后，FP-30X MIDI 应出现在下方区域。选择它并点击连接。\n• 返回此处，按刷新，选择 FP-30X MIDI 输出，然后连接。\n\nWINDOWS（蓝牙）\n• 按照 Roland 的指南，在设置 → 蓝牙和其他设备中配对钢琴。\n• 如果没有出现 MIDI 端口，请安装或使用 Roland 的蓝牙 MIDI 软件作为桥接。\n• 最后在此应用中刷新并选择 MIDI 端口输出。\n\niOS / ANDROID\n• 此控制器目前仅适用于 macOS。请将钢琴连接到电脑以使用本应用。\n\n双工 MIDI（推荐）\n要使双向同步正常工作：连接一个 MIDI 输出和同一钢琴设备的 MIDI 输入（例如 FP-30X 输出和 FP-30X 输入）。应用程序将自动检测并请求钢琴当前设置。仅输出连接可以发送参数，但无法读取或同步钢琴状态。\n\n强制软件 MIDI 同步\n如果钢琴的自动检测工作不正常，请先断开连接，然后同时选择输出和输入（即使名称相同也请手动选择两者），然后重新连接。";
 "label_master_volume" = "主音量 (RT)";
 "label_transpose" = "移调";
@@ -139,9 +134,6 @@
 "tone_cat_other" = "其他";
 "tone_cat_drums" = "鼓组";
 "tone_cat_gm2" = "GM2";
-"label_lang_en" = "English";
-"label_lang_es" = "Español";
-"label_lang_zh" = "中文";
 "pd_temp_equal" = "平均律";
 "pd_temp_just_major" = "纯律大调";
 "pd_temp_just_minor" = "纯律小调";

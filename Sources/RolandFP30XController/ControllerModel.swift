@@ -6,7 +6,6 @@ import RolandMIDI
 // MARK: - Defaults & constants
 
 let kSettingTransposeValue = "transpose/value"
-let kSettingUILang = "ui/lang"
 let kSettingConnectHelpSkipStartup = "connect_help_skip_startup"
 let kSettingPdWarningShown = "pd_warning_shown"
 
@@ -39,12 +38,6 @@ let beatTable: [(midiVal: Int, num: Int)] = [
 
 let metroGridCols = 5
 
-let toneCategoryI18nKeys: [String: String] = [
-    "Piano": "tone_cat_piano", "E.Piano": "tone_cat_epiano", "Organ": "tone_cat_organ",
-    "Strings": "tone_cat_strings", "Pad": "tone_cat_pad", "Synth": "tone_cat_synth",
-    "Other": "tone_cat_other", "Drums": "tone_cat_drums", "GM2": "tone_cat_gm2",
-]
-
 let keyTouchI18nKeys = [
     "key_touch_fix", "key_touch_super_light", "key_touch_light",
     "key_touch_medium", "key_touch_heavy", "key_touch_super_heavy",
@@ -56,19 +49,16 @@ let temperamentI18nKeys = [
     "pd_temp_kirnberger_3", "pd_temp_meantone", "pd_temp_werckmeister", "pd_temp_arabic",
 ]
 
-let temperamentKeysLetter = ["C", "C♯", "D", "E♭", "E", "F", "F♯", "G", "A♭", "A", "B♭", "B"]
-let temperamentKeysSolfege = ["Do", "Do#", "Re", "Mib", "Mi", "Fa", "Fa#", "Sol", "Lab", "La", "Sib", "Si"]
+let noteNames = ["C", "C♯", "D", "D♯", "E", "F", "F♯", "G", "G♯", "A", "A♯", "B"]
+
+let temperamentKeys = ["C", "C♯", "D", "E♭", "E", "F", "F♯", "G", "A♭", "A", "B♭", "B"]
 
 let metroPatternGlyphs: [String?] = [
     nil, "♫", "♪♪♪₃", "♫₂", "♬", "♬₃", "♩", "♪",
 ]
 
-let noteNamesLetter = ["C", "C♯", "D", "D♯", "E", "F", "F♯", "G", "G♯", "A", "A♯", "B"]
-let noteNamesSolfege = ["Do", "Do#", "Re", "Re#", "Mi", "Fa", "Fa#", "Sol", "Sol#", "La", "La#", "Si"]
-
-func midiNoteName(_ note: Int, _ lang: Lang) -> String {
-    let names = lang == .es ? noteNamesSolfege : noteNamesLetter
-    return "\(names[note % 12])\(note / 12 - 1)"
+func midiNoteName(_ note: Int) -> String {
+    return "\(noteNames[note % 12])\(note / 12 - 1)"
 }
 
 // MARK: - ControllerModel
@@ -82,9 +72,6 @@ final class ControllerModel: ObservableObject {
     @Published var isConnected: Bool = false
     @Published var lastOutputPort: String?
     var lastInputPort: String?
-
-    // MARK: Language
-    @Published var lang: Lang = .en
 
     // MARK: Status
     @Published var statusText: String = ""
@@ -258,13 +245,6 @@ final class ControllerModel: ObservableObject {
 
         // Load saved settings
         let ud = UserDefaults.standard
-        if let langStr = ud.string(forKey: kSettingUILang), let l = Lang(rawValue: langStr) {
-            self.lang = l
-        } else if Locale.current.language.languageCode?.identifier == "zh" {
-            self.lang = .zh
-        } else if Locale.current.language.languageCode?.identifier == "es" {
-            self.lang = .es
-        }
         if let tv = ud.object(forKey: kSettingTransposeValue) as? Int {
             self.transpose = tv
         }
@@ -288,19 +268,12 @@ final class ControllerModel: ObservableObject {
         FileHandle.standardError.write(Data("MIDI [OUT] \(msg)  |  \(raw)\n".utf8))
     }
 
-    // MARK: - Language
-
-    func setLanguage(_ code: Lang) {
-        lang = code
-        UserDefaults.standard.set(code.rawValue, forKey: kSettingUILang)
-    }
-
     // MARK: - Port enumeration
 
     func refreshPorts() {
         outputNames = listOutputNames()
         inputNames = listInputNames()
-        statusText = tr(lang, "status_midi_ports", [outputNames.count, inputNames.count])
+        statusText = locf("status_midi_ports", outputNames.count, inputNames.count)
     }
 
     // MARK: - Connect / Disconnect
@@ -311,13 +284,13 @@ final class ControllerModel: ObservableObject {
         } else {
             let name = selectedOutput.trimmingCharacters(in: .whitespaces)
             guard !name.isEmpty else {
-                statusText = tr(lang, "err_no_port")
+                statusText = loc("err_no_port")
                 return
             }
             do {
                 try midi.open(name)
             } catch {
-                statusText = tr(lang, "err_open_port", ["\(error)"])
+                statusText = locf("err_open_port", "\(error)")
                 return
             }
             lastOutputPort = name
@@ -339,13 +312,13 @@ final class ControllerModel: ObservableObject {
             }
 
             if midiInWorker != nil, let _ = lastInputPort {
-                statusText = tr(lang, "status_connected_sync", [name, lastInputPort!])
+                statusText = locf("status_connected_sync", name, lastInputPort!)
                 requestPianoState()
                 pianoPollTimer = Timer.scheduledTimer(withTimeInterval: 2.5, repeats: true) { [weak self] _ in
                     Task { @MainActor in self?.requestPianoState() }
                 }
             } else {
-                statusText = tr(lang, "status_connected", [name])
+                statusText = locf("status_connected", name)
             }
             syncConnectionDependentControls()
             if transpose != 0 { sendTranspose(updateStatus: false) }
@@ -376,9 +349,9 @@ final class ControllerModel: ObservableObject {
         updateConnectButton()
         syncConnectionDependentControls()
         if let n = name {
-            statusText = tr(lang, statusKey, [n])
+            statusText = locf(statusKey, n)
         } else {
-            statusText = tr(lang, statusKey)
+            statusText = loc(statusKey)
         }
     }
 
@@ -393,7 +366,7 @@ final class ControllerModel: ObservableObject {
         if let inp = lastInputPort, !listInputNames().contains(inp) {
             stopMidiInWorker()
             lastInputPort = nil
-            statusText = tr(lang, "status_device_lost", [inp])
+            statusText = locf("status_device_lost", inp)
             refreshPorts()
             syncConnectionDependentControls()
         }
@@ -459,11 +432,11 @@ final class ControllerModel: ObservableObject {
         for t in TONE_PRESETS {
             if t.bankMsb == msb, t.bankLsb == lsb, t.programDoc == pdoc {
                 setSingleTone(t)
-                statusText = tr(lang, "status_tone_from_piano", [t.name])
+                statusText = locf("status_tone_from_piano", t.name)
                 return
             }
         }
-        statusText = tr(lang, "status_piano_tone_unknown", [msb, lsb, pdoc])
+        statusText = locf("status_piano_tone_unknown", msb, lsb, pdoc)
     }
 
     // MARK: - DT1 handler (port of `_handle_dt1`)
@@ -617,8 +590,8 @@ final class ControllerModel: ObservableObject {
         if known { UserDefaults.standard.set(value, forKey: kSettingTransposeValue) }
         if emitStatus {
             statusText = known
-                ? tr(lang, "status_transpose_from_piano", [value])
-                : tr(lang, "status_transpose_unknown")
+                ? locf("status_transpose_from_piano", value)
+                : loc("status_transpose_unknown")
         }
     }
 
@@ -734,7 +707,7 @@ final class ControllerModel: ObservableObject {
 
     func onReadPianoValuesClicked() {
         guard isConnected, lastInputPort != nil else {
-            statusText = tr(lang, "err_read_piano_needs_sync")
+            statusText = loc("err_read_piano_needs_sync")
             return
         }
         guard !readPianoValuesActive else { return }
@@ -831,7 +804,7 @@ final class ControllerModel: ObservableObject {
         invNoteIndex = 0; invTuning = 0; invCharacter = 0
 
         guard isConnected else {
-            statusText = tr(lang, "status_defaults_offline")
+            statusText = loc("status_defaults_offline")
             return
         }
 
@@ -863,7 +836,7 @@ final class ControllerModel: ObservableObject {
             userSend(pianoDesignerTemperamentSet(0))
             userSend(pianoDesignerTemperamentKeySet(0))
         }
-        statusText = tr(lang, "status_defaults_sent")
+        statusText = loc("status_defaults_sent")
     }
 
     // Helper: catch throws for known-safe ranges, return identity-ish
@@ -897,9 +870,9 @@ final class ControllerModel: ObservableObject {
     func pdSendTemperamentKey(_ idx: Int) { guard ensurePianoDesignerActive() else { return }; userSend(pianoDesignerTemperamentKeySet(idx)) }
 
     func pdSaveToPiano() {
-        guard ensurePianoDesignerActive() else { statusText = tr(lang, "msg_connect_before_send"); return }
+        guard ensurePianoDesignerActive() else { statusText = loc("msg_connect_before_send"); return }
         userSend(pianoDesignerWrite())
-        statusText = tr(lang, "status_pd_saved")
+        statusText = loc("status_pd_saved")
     }
 
     // MARK: - Individual note voicing
@@ -935,14 +908,14 @@ final class ControllerModel: ObservableObject {
         masterVolDebounceWorkItem?.cancel()
         userSend(try masterVolumeSet(value: masterVolume))
         masterVolSentAt = Date().timeIntervalSince1970
-        statusText = tr(lang, "status_master_volume_sent", [masterVolume])
+        statusText = locf("status_master_volume_sent", masterVolume)
     }
 
     func sendTranspose(updateStatus: Bool = true) {
         guard isConnected else { return }
         UserDefaults.standard.set(transpose, forKey: kSettingTransposeValue)
         userSend(try masterCoarseTuningRealtime(semitones: transpose))
-        if updateStatus { statusText = tr(lang, "status_transpose_sent", [transpose]) }
+        if updateStatus { statusText = locf("status_transpose_sent", transpose) }
     }
 
     func sendMasterTuning() {
@@ -972,10 +945,10 @@ final class ControllerModel: ObservableObject {
     // MARK: - Metronome sends
 
     func sendMetronomeProbe() {
-        guard isConnected else { statusText = tr(lang, "msg_connect_before_send"); return }
+        guard isConnected else { statusText = loc("msg_connect_before_send"); return }
         userSend(metronomeToggle())
         metronomeOn = metronomeOn.map { !$0 } ?? true
-        statusText = tr(lang, "status_metronome_probe_sent")
+        statusText = loc("status_metronome_probe_sent")
     }
 
     func flushTempo() {
