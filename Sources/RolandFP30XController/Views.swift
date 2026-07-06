@@ -867,7 +867,7 @@ extension ControllerModel {
     var transposeSigned: String { transpose != 0 ? "\(transpose > 0 ? "+" : "")\(transpose)" : "0" }
 
     func trl(_ key: String, _ args: CVarArg...) -> String {
-        RolandFP30XController._tr(lang, key, args)
+        RolandFP30XController.tr(lang, key, args)
     }
 
     func toneCategoryLabel(_ cat: String) -> String {

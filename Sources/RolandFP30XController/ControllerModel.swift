@@ -300,7 +300,7 @@ final class ControllerModel: ObservableObject {
     func refreshPorts() {
         outputNames = listOutputNames()
         inputNames = listInputNames()
-        statusText = tr(lang, "status_midi_ports", outputNames.count, inputNames.count)
+        statusText = tr(lang, "status_midi_ports", [outputNames.count, inputNames.count])
     }
 
     // MARK: - Connect / Disconnect
@@ -317,7 +317,7 @@ final class ControllerModel: ObservableObject {
             do {
                 try midi.open(name)
             } catch {
-                statusText = tr(lang, "err_open_port", "\(error)")
+                statusText = tr(lang, "err_open_port", ["\(error)"])
                 return
             }
             lastOutputPort = name
@@ -339,13 +339,13 @@ final class ControllerModel: ObservableObject {
             }
 
             if midiInWorker != nil, let _ = lastInputPort {
-                statusText = tr(lang, "status_connected_sync", name, lastInputPort!)
+                statusText = tr(lang, "status_connected_sync", [name, lastInputPort!])
                 requestPianoState()
                 pianoPollTimer = Timer.scheduledTimer(withTimeInterval: 2.5, repeats: true) { [weak self] _ in
                     Task { @MainActor in self?.requestPianoState() }
                 }
             } else {
-                statusText = tr(lang, "status_connected", name)
+                statusText = tr(lang, "status_connected", [name])
             }
             syncConnectionDependentControls()
             if transpose != 0 { sendTranspose(updateStatus: false) }
@@ -376,7 +376,7 @@ final class ControllerModel: ObservableObject {
         updateConnectButton()
         syncConnectionDependentControls()
         if let n = name {
-            statusText = tr(lang, statusKey, n)
+            statusText = tr(lang, statusKey, [n])
         } else {
             statusText = tr(lang, statusKey)
         }
@@ -393,7 +393,7 @@ final class ControllerModel: ObservableObject {
         if let inp = lastInputPort, !listInputNames().contains(inp) {
             stopMidiInWorker()
             lastInputPort = nil
-            statusText = tr(lang, "status_device_lost", inp)
+            statusText = tr(lang, "status_device_lost", [inp])
             refreshPorts()
             syncConnectionDependentControls()
         }
@@ -459,11 +459,11 @@ final class ControllerModel: ObservableObject {
         for t in TONE_PRESETS {
             if t.bankMsb == msb, t.bankLsb == lsb, t.programDoc == pdoc {
                 setSingleTone(t)
-                statusText = tr(lang, "status_tone_from_piano", t.name)
+                statusText = tr(lang, "status_tone_from_piano", [t.name])
                 return
             }
         }
-        statusText = tr(lang, "status_piano_tone_unknown", msb, lsb, pdoc)
+        statusText = tr(lang, "status_piano_tone_unknown", [msb, lsb, pdoc])
     }
 
     // MARK: - DT1 handler (port of `_handle_dt1`)
@@ -617,7 +617,7 @@ final class ControllerModel: ObservableObject {
         if known { UserDefaults.standard.set(value, forKey: kSettingTransposeValue) }
         if emitStatus {
             statusText = known
-                ? tr(lang, "status_transpose_from_piano", value)
+                ? tr(lang, "status_transpose_from_piano", [value])
                 : tr(lang, "status_transpose_unknown")
         }
     }
@@ -935,14 +935,14 @@ final class ControllerModel: ObservableObject {
         masterVolDebounceWorkItem?.cancel()
         userSend(try masterVolumeSet(value: masterVolume))
         masterVolSentAt = Date().timeIntervalSince1970
-        statusText = tr(lang, "status_master_volume_sent", masterVolume)
+        statusText = tr(lang, "status_master_volume_sent", [masterVolume])
     }
 
     func sendTranspose(updateStatus: Bool = true) {
         guard isConnected else { return }
         UserDefaults.standard.set(transpose, forKey: kSettingTransposeValue)
         userSend(try masterCoarseTuningRealtime(semitones: transpose))
-        if updateStatus { statusText = tr(lang, "status_transpose_sent", transpose) }
+        if updateStatus { statusText = tr(lang, "status_transpose_sent", [transpose]) }
     }
 
     func sendMasterTuning() {

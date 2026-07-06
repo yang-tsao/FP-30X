@@ -20,11 +20,7 @@ public enum Lang: String, CaseIterable, Sendable {
     }
 }
 
-public func tr(_ lang: Lang, _ key: String, _ args: CVarArg...) -> String {
-    _tr(lang, key, args)
-}
-
-func _tr(_ lang: Lang, _ key: String, _ args: [CVarArg]) -> String {
+public func tr(_ lang: Lang, _ key: String, _ args: [CVarArg] = []) -> String {
     let fmt = lang.bundle.localizedString(forKey: key, value: key, table: nil)
     if args.isEmpty { return fmt }
     return String(format: fmt, locale: lang.locale, arguments: args)
