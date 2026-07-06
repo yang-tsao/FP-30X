@@ -56,20 +56,18 @@ let temperamentI18nKeys = [
     "pd_temp_kirnberger_3", "pd_temp_meantone", "pd_temp_werckmeister", "pd_temp_arabic",
 ]
 
-let temperamentKeysEn = ["C", "C#", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B"]
-let temperamentKeysEs = ["Do", "Do#", "Re", "Mib", "Mi", "Fa", "Fa#", "Sol", "Lab", "La", "Sib", "Si"]
-let temperamentKeysZh = ["C", "C♯", "D", "E♭", "E", "F", "F♯", "G", "A♭", "A", "B♭", "B"]
+let temperamentKeysLetter = ["C", "C♯", "D", "E♭", "E", "F", "F♯", "G", "A♭", "A", "B♭", "B"]
+let temperamentKeysSolfege = ["Do", "Do#", "Re", "Mib", "Mi", "Fa", "Fa#", "Sol", "Lab", "La", "Sib", "Si"]
 
 let metroPatternGlyphs: [String?] = [
     nil, "♫", "♪♪♪₃", "♫₂", "♬", "♬₃", "♩", "♪",
 ]
 
-let noteNamesEn = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
-let noteNamesEs = ["Do", "Do#", "Re", "Re#", "Mi", "Fa", "Fa#", "Sol", "Sol#", "La", "La#", "Si"]
-let noteNamesZh = ["C", "C♯", "D", "D♯", "E", "F", "F♯", "G", "G♯", "A", "A♯", "B"]
+let noteNamesLetter = ["C", "C♯", "D", "D♯", "E", "F", "F♯", "G", "G♯", "A", "A♯", "B"]
+let noteNamesSolfege = ["Do", "Do#", "Re", "Re#", "Mi", "Fa", "Fa#", "Sol", "Sol#", "La", "La#", "Si"]
 
 func midiNoteName(_ note: Int, _ lang: Lang) -> String {
-    let names = lang == .es ? noteNamesEs : (lang == .zh ? noteNamesZh : noteNamesEn)
+    let names = lang == .es ? noteNamesSolfege : noteNamesLetter
     return "\(names[note % 12])\(note / 12 - 1)"
 }
 

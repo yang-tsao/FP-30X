@@ -690,7 +690,7 @@ private struct PianoDesignerView: View {
                     Spacer()
                     Picker("", selection: Binding(get: { model.pdTemperamentKey }, set: { model.pdTemperamentKey = $0; model.pdSendTemperamentKey($0) })) {
                         ForEach(0..<12, id: \.self) { i in
-                            Text(model.lang == .es ? temperamentKeysEs[i] : (model.lang == .zh ? temperamentKeysZh[i] : temperamentKeysEn[i])).tag(i)
+                            Text(model.lang == .es ? temperamentKeysSolfege[i] : temperamentKeysLetter[i]).tag(i)
                         }
                     }
                 }
